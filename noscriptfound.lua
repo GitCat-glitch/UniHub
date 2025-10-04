@@ -6,7 +6,7 @@ local Window = Rayfield:CreateWindow({
     LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
     -- pass the asset id as a number (not a "rbxassetid://" string)
-    Icon = 135042641649273,
+    Icon = 15462829911,
     Color = Color3.fromRGB(255,0,0),
 
     ShowText = "Rayfield",
