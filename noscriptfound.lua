@@ -74,23 +74,7 @@ local Players = game:GetService("Players")
 local highlights = {}
 
 
-local function addHighlightToPlayer(player)
-	local char = player.Character or player.CharacterAdded:Wait()
-	
-	
-	if highlights[player] then
-		highlights[player]:Destroy()
-	end
 
-	local highlight = Instance.new("Highlight")
-	highlight.FillColor = Color3.fromRGB(255, 255, 0) 
-	highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-	highlight.FillTransparency = 0.5
-	highlight.OutlineTransparency = 0
-	highlight.Parent = char
-
-	highlights[player] = highlight
-end
 
 local highlights = {}
 local espEnabled = false
@@ -121,7 +105,7 @@ local function enableESP()
 		
 		player.CharacterAdded:Connect(function()
 			if espEnabled then
-				task.wait(1)
+				task.wait(0)
 				addHighlightToPlayer(player)
 			end
 		end)
