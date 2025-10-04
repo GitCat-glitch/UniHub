@@ -5,8 +5,9 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "hello there <3",
     LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
-    -- Icon = 135042641649273,
-    Icon = "rbxassetid://135042641649273",
+    -- pass the asset id as a number (not a "rbxassetid://" string)
+    Icon = 135042641649273,
+    Color = Color3.fromRGB(255,0,0),
 
     ShowText = "Rayfield",
 
@@ -24,17 +25,18 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
 
-   KeySystem = true, -- Set this to true to use our key system
+   KeySystem = true,
    KeySettings = {
       Title = "Key Menu Omega",
       Subtitle = "yep",
-      Note = "How do you get keys? idk heres one : realc0lkit", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"SomeoneSucks", "C0lgate", "tembl3udud", "RealC0lkit"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      Note = "How do you get keys? idk heres one : realc0lkit",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"SomeoneSucks", "C0lgate", "tembl3udud", "RealC0lkit"}
    }
 })
+
 
 
 
