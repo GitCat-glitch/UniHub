@@ -22,12 +22,21 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
 
-    KeySystem = false
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Key Menu Omega",
+      Subtitle = "How do you get keys? idk heres one : C0lgate",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"SomeoneSucks", "C0lgate", "tembl3udud"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
 })
 
 
 
-local scriptsTAB = Window:CreateTab("Player", 4483362458)
+local scriptsTAB = Window:CreateTab("Player", 135042641649273)
 local KeybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
 
