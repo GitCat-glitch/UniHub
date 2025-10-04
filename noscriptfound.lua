@@ -6,7 +6,8 @@ local Window = Rayfield:CreateWindow({
     LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
     -- Icon = 135042641649273,
-    Icon = 135042641649273,
+    Icon = "rbxassetid://135042641649273",
+
     ShowText = "Rayfield",
 
     ConfigurationSaving = {
