@@ -1,4 +1,4 @@
--- Load Rayfield UI
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -18,21 +18,21 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false
 })
 
--- Create "Humanoid" tab
+
 local scriptstab = Window:CreateTab("Humanoid", 4483362458)
 
--- Services
+
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Variables
+
 local creatingParts = false
 local maxParts = 20
 local partList = {}
-local toggleKey = Enum.KeyCode.F -- Default keybind
+local toggleKey = Enum.KeyCode.F 
 
--- Create part function
+
 local function createPart()
     local character = player.Character
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
@@ -55,7 +55,7 @@ local function createPart()
     end
 end
 
--- Loop for spawning parts
+
 local function startPartCreationLoop()
     task.spawn(function()
         while creatingParts do
@@ -65,7 +65,63 @@ local function startPartCreationLoop()
     end)
 end
 
--- Key input toggle
+
+
+
+local Players = game:GetService("Players")
+
+
+local highlights = {}
+
+
+local function addHighlightToPlayer(player)
+	local char = player.Character or player.CharacterAdded:Wait()
+	
+	
+	if highlights[player] then
+		highlights[player]:Destroy()
+	end
+
+	local highlight = Instance.new("Highlight")
+	highlight.FillColor = Color3.fromRGB(255, 255, 0) 
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+	highlight.FillTransparency = 0.5
+	highlight.OutlineTransparency = 0
+	highlight.Parent = char
+
+	highlights[player] = highlight
+end
+
+
+local function ESP(wat)
+    if wat then
+        	for _, player in ipairs(Players:GetPlayers()) do
+		addHighlightToPlayer(player)
+	end
+else
+    	for player, highlight in pairs(highlights) do
+		if highlight and highlight.Parent then
+			highlight:Destroy()
+		end
+	end
+	table.clear(highlights)
+    end
+
+end
+
+
+
+
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function()
+		task.wait(1)
+		addHighlightToPlayer(player)
+	end)
+end)
+
+
+
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.KeyCode == toggleKey then
@@ -76,7 +132,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Rayfield toggle button (optional GUI control)
+
 scriptstab:CreateToggle({
     Name = "Create Path (Toggle)",
     CurrentValue = false,
@@ -92,7 +148,7 @@ scriptstab:CreateToggle({
 scriptstab:CreateInput({
     Name = "Change Toggle Key",
     PlaceholderText = "Enter key (e.g. F, G, T)",
-    RemoveTextAfterFocusLost = true,
+    RemoveTextAfterFocusLost = false,
     Callback = function(inputText)
         local upper = inputText:upper()
         local newKeyCode = Enum.KeyCode[upper]
@@ -119,7 +175,7 @@ scriptstab:CreateInput({
 scriptstab:CreateInput({
     Name = "Walkspeed",
     PlaceholderText = "Enter Number (16, 32, 64, 128)",
-    RemoveTextAfterFocusLost = true,
+    RemoveTextAfterFocusLost = false,
     Callback = function(v)
         player.Character.Humanoid.WalkSpeed = v
             Rayfield:Notify({
@@ -134,12 +190,28 @@ scriptstab:CreateInput({
 scriptstab:CreateInput({
     Name = "Jump Power",
     PlaceholderText = "Enter Number (16, 32, 64, 128)",
-    RemoveTextAfterFocusLost = true,
+    RemoveTextAfterFocusLost = false,
     Callback = function(v)
         player.Character.Humanoid.JumpPower = v
             Rayfield:Notify({
                 Title = "Success",
                 Content = "Set JumpPower to: '" .. v .. "'.",
+                Duration = 3,
+                Image = nil
+            })
+    end,
+})
+
+
+scriptstab:CreateToggle({
+    Name = "ESP",
+    PlaceholderText = "ESP",
+    RemoveTextAfterFocusLost = true,
+    Callback = function(v)
+        ESP(v)
+            Rayfield:Notify({
+                Title = "Activated ESP",
+                Content = "",
                 Duration = 3,
                 Image = nil
             })
