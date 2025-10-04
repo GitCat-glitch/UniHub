@@ -1,4 +1,3 @@
-
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -6,25 +5,27 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "hello there <3",
     LoadingSubtitle = "by someone that i cant tell",
 
-
-    Icon = game:HttpGet("https://m.gjcdn.net/fireside-post-image/900/36008067-mjzsqbvp-v4.webp"),
-
+    -- ✅ Use the URL directly, not game:HttpGet
+    Icon = "https://m.gjcdn.net/fireside-post-image/900/36008067-mjzsqbvp-v4.webp",
     ShowText = "Rayfield",
 
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Script",
         FileName = "Config"
-    },  
-    Theme = "Default", 
+    },
+
+    Theme = "Default",
 
     Discord = {
         Enabled = false,
         Invite = "",
         RememberJoins = true
     },
+
     KeySystem = false
 })
+
 
 
 local scriptsTAB = Window:CreateTab("Player", 4483362458)
