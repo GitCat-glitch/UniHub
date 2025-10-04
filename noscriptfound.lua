@@ -5,11 +5,19 @@ local Window = Rayfield:CreateWindow({
     Name = "UniScript HUB [v1]",
     LoadingTitle = "hello there <3",
     LoadingSubtitle = "by someone that i cant tell",
+
+
+    Icon = game:HttpGet("https://m.gjcdn.net/fireside-post-image/900/36008067-mjzsqbvp-v4.webp"),
+
+    ShowText = "Rayfield",
+
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Script",
         FileName = "Config"
-    },
+    },  
+    Theme = "Default", 
+
     Discord = {
         Enabled = false,
         Invite = "",
@@ -156,7 +164,7 @@ scriptsTAB:CreateToggle({
 })
 
 KeybindsTAB:CreateInput({
-    Name = "Change Toggle Key",
+    Name = "Create Path Toggle Key ",
     PlaceholderText = "Enter key (e.g. F, G, T)",
     RemoveTextAfterFocusLost = false,
     Callback = function(inputText)
