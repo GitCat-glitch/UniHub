@@ -18,9 +18,9 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false
 })
 
-
-local scriptsTAB = Window:CreateTab("Humanoid", 4483362458)
-local KeybindsTAB = Window:CreateTab("Humanoid", 4483362458)
+-- TABS
+local scriptsTAB = Window:CreateTab("Player", 4483362458)
+local KeybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
 
 local UserInputService = game:GetService("UserInputService")
@@ -237,7 +237,7 @@ scriptsTAB:CreateToggle({
     end,
 })
 
-scriptsTAB:CreateInput({
+KeybindsTAB:CreateInput({
     Name = "Change Toggle Key",
     PlaceholderText = "Enter key (e.g. F, G, T)",
     RemoveTextAfterFocusLost = false,
@@ -320,3 +320,22 @@ scriptsTAB:CreateToggle({
 })
 
 
+local Dropdown = uiTAB:CreateDropdown({
+   Name = "Theme",
+   Options = {"Default", "Amber Glow", "Amethyst", "Bloom", "Dark Blue", "Green", "Light", "Ocean", "Serenity"},
+   CurrentOption = {"Default"},
+   MultipleOptions = false,
+   Flag = "Theme",
+   Callback = function(Options)
+      -- Extract the first selected option (since MultipleOptions = false)
+      local selectedTheme = Options[1]
+      if selectedTheme then
+         Window:SetTheme(selectedTheme)
+         Rayfield:Notify({
+            Title = "Theme Changed",
+            Content = "Theme set to: " .. selectedTheme,
+            Duration = 3
+         })
+      end
+   end,
+})
