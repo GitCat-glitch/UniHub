@@ -19,8 +19,9 @@ local Window = Rayfield:CreateWindow({
 })
 
 
-local scriptstab = Window:CreateTab("Humanoid", 4483362458)
-
+local scriptsTAB = Window:CreateTab("Humanoid", 4483362458)
+local KeybindsTAB = Window:CreateTab("Humanoid", 4483362458)
+local uiTAB = Window:CreateTab("UI", 4483362458)
 
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -73,9 +74,6 @@ local Players = game:GetService("Players")
 
 local highlights = {}
 
-
-
-
 local highlights = {}
 local espEnabled = false
 
@@ -97,38 +95,101 @@ local function addHighlightToPlayer(player)
 	highlights[player] = highlight
 end
 
+-- ====== ESP (replace your old ESP section with this) ======
+local highlights = {}
+local espEnabled = false
+
+local function addHighlightToCharacter(plr, char)
+	if not plr or not char then return end
+
+	-- Remove old highlight for this player (if any)
+	if highlights[plr] and highlights[plr].Parent then
+		highlights[plr]:Destroy()
+	end
+	highlights[plr] = nil
+
+	-- Wait for important parts so the highlight can attach properly
+	if not char:FindFirstChild("HumanoidRootPart") then
+		-- safe wait with timeout
+		pcall(function() char:WaitForChild("HumanoidRootPart", 5) end)
+	end
+
+	-- If the character was removed while waiting, bail out
+	if not char.Parent then return end
+
+	local highlight = Instance.new("Highlight")
+	highlight.FillColor = Color3.fromRGB(255, 255, 0)
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+	highlight.FillTransparency = 0.5
+	highlight.OutlineTransparency = 0
+	highlight.Parent = char -- parent to the character model
+
+	highlights[plr] = highlight
+end
+
+local function onCharacterAdded(plr, character)
+	-- spawn so we don't block the CharacterAdded event
+	task.spawn(function()
+		-- only add highlight if ESP is enabled
+		if espEnabled then
+			-- small wait to ensure replication (HumanoidRootPart wait above helps too)
+			task.wait(0.2)
+			addHighlightToCharacter(plr, character)
+		end
+	end)
+end
+
+-- Connect CharacterAdded for players that join in the future
+Players.PlayerAdded:Connect(function(plr)
+	plr.CharacterAdded:Connect(function(char)
+		onCharacterAdded(plr, char)
+	end)
+	-- if they already have a character (joining quickly), handle it
+	if plr.Character then
+		onCharacterAdded(plr, plr.Character)
+	end
+end)
+
+-- Connect for players already in-game when the script runs
+for _, plr in ipairs(Players:GetPlayers()) do
+	plr.CharacterAdded:Connect(function(char)
+		onCharacterAdded(plr, char)
+	end)
+	if plr.Character then
+		onCharacterAdded(plr, plr.Character)
+	end
+end
+
+-- Clean up highlights when a player leaves
+Players.PlayerRemoving:Connect(function(plr)
+	if highlights[plr] then
+		highlights[plr]:Destroy()
+		highlights[plr] = nil
+	end
+end)
+
+-- Public enable/disable functions used by your Rayfield toggle
 local function enableESP()
 	espEnabled = true
-	for _, player in ipairs(Players:GetPlayers()) do
-		addHighlightToPlayer(player)
-
-		
-		player.CharacterAdded:Connect(function()
-			if espEnabled then
-				task.wait(0)
-				addHighlightToPlayer(player)
-			end
-		end)
+	-- apply to all existing players
+	for _, plr in ipairs(Players:GetPlayers()) do
+		if plr.Character then
+			addHighlightToCharacter(plr, plr.Character)
+		end
 	end
 end
 
 local function disableESP()
 	espEnabled = false
-	for player, highlight in pairs(highlights) do
-		if highlight and highlight.Parent then
-			highlight:Destroy()
+	for plr, hl in pairs(highlights) do
+		if hl and hl.Parent then
+			hl:Destroy()
 		end
+		highlights[plr] = nil
 	end
-	table.clear(highlights)
 end
 
-local function ESP(state)
-	if state then
-		enableESP()
-	else
-		disableESP()
-	end
-end
+-- ====== End ESP replacement ======
 
 Players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function()
@@ -164,7 +225,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 
-scriptstab:CreateToggle({
+scriptsTAB:CreateToggle({
     Name = "Create Path (Toggle)",
     CurrentValue = false,
     Flag = "pathcreator",
@@ -176,7 +237,7 @@ scriptstab:CreateToggle({
     end,
 })
 
-scriptstab:CreateInput({
+scriptsTAB:CreateInput({
     Name = "Change Toggle Key",
     PlaceholderText = "Enter key (e.g. F, G, T)",
     RemoveTextAfterFocusLost = false,
@@ -203,7 +264,7 @@ scriptstab:CreateInput({
     end,
 })
 
-scriptstab:CreateInput({
+scriptsTAB:CreateInput({
     Name = "Walkspeed",
     PlaceholderText = "Enter Number (16, 32, 64, 128)",
     RemoveTextAfterFocusLost = false,
@@ -218,7 +279,7 @@ scriptstab:CreateInput({
     end,
 })
 
-scriptstab:CreateInput({
+scriptsTAB:CreateInput({
     Name = "Jump Power",
     PlaceholderText = "Enter Number (16, 32, 64, 128)",
     RemoveTextAfterFocusLost = false,
@@ -234,19 +295,21 @@ scriptstab:CreateInput({
 })
 
 
-scriptstab:CreateToggle({
+scriptsTAB:CreateToggle({
     Name = "ESP",
     PlaceholderText = "ESP",
     RemoveTextAfterFocusLost = true,
     Callback = function(v)
-        ESP(v)
+       
         if v then
+            enableESP()
             Rayfield:Notify({
                 Title = "ESP",
                 Content = "is on",
                 Duration = 3
             })
         else
+            disableESP()
             Rayfield:Notify({
                 Title = "ESP",
                 Content = "is off",
