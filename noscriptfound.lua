@@ -1,7 +1,6 @@
 -- Load Rayfield UI
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Create main window
 local Window = Rayfield:CreateWindow({
     Name = "UniScript HUB [v1]",
     LoadingTitle = "hello there <3",
@@ -126,6 +125,21 @@ scriptstab:CreateInput({
             Rayfield:Notify({
                 Title = "Success",
                 Content = "Set Walkspeed to: '" .. v .. "'.",
+                Duration = 3,
+                Image = nil
+            })
+    end,
+})
+
+scriptstab:CreateInput({
+    Name = "Jump Power",
+    PlaceholderText = "Enter Number (16, 32, 64, 128)",
+    RemoveTextAfterFocusLost = true,
+    Callback = function(v)
+        player.Character.Humanoid.JumpPower = v
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Set JumpPower to: '" .. v .. "'.",
                 Duration = 3,
                 Image = nil
             })
