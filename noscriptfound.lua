@@ -92,22 +92,69 @@ local function addHighlightToPlayer(player)
 	highlights[player] = highlight
 end
 
+local highlights = {}
+local espEnabled = false
 
-local function ESP(wat)
-    if wat then
-        	for _, player in ipairs(Players:GetPlayers()) do
-		addHighlightToPlayer(player)
+local function addHighlightToPlayer(player)
+	local char = player.Character or player.CharacterAdded:Wait()
+
+	
+	if highlights[player] then
+		highlights[player]:Destroy()
 	end
-else
-    	for player, highlight in pairs(highlights) do
+
+	local highlight = Instance.new("Highlight")
+	highlight.FillColor = Color3.fromRGB(255, 255, 0)
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+	highlight.FillTransparency = 0.5
+	highlight.OutlineTransparency = 0
+	highlight.Parent = char
+
+	highlights[player] = highlight
+end
+
+local function enableESP()
+	espEnabled = true
+	for _, player in ipairs(Players:GetPlayers()) do
+		addHighlightToPlayer(player)
+
+		
+		player.CharacterAdded:Connect(function()
+			if espEnabled then
+				task.wait(1)
+				addHighlightToPlayer(player)
+			end
+		end)
+	end
+end
+
+local function disableESP()
+	espEnabled = false
+	for player, highlight in pairs(highlights) do
 		if highlight and highlight.Parent then
 			highlight:Destroy()
 		end
 	end
 	table.clear(highlights)
-    end
-
 end
+
+local function ESP(state)
+	if state then
+		enableESP()
+	else
+		disableESP()
+	end
+end
+
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function()
+		if espEnabled then
+			task.wait(1)
+			addHighlightToPlayer(player)
+		end
+	end)
+end)
+
 
 
 
@@ -209,12 +256,20 @@ scriptstab:CreateToggle({
     RemoveTextAfterFocusLost = true,
     Callback = function(v)
         ESP(v)
+        if v then
             Rayfield:Notify({
-                Title = "Activated ESP",
-                Content = "",
-                Duration = 3,
-                Image = nil
+                Title = "ESP",
+                Content = "is on",
+                Duration = 3
             })
+        else
+            Rayfield:Notify({
+                Title = "ESP",
+                Content = "is off",
+                Duration = 3
+            })
+        end
     end,
 })
+
 
