@@ -3,10 +3,9 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "UniScript HUB [v1]",
     LoadingTitle = "hello there <3",
-    LoadingSubtitle = "by someone that i cant tell",
+    LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
-    -- ✅ Use the URL directly, not game:HttpGet
-    Icon = "https://m.gjcdn.net/fireside-post-image/900/36008067-mjzsqbvp-v4.webp",
+    Icon = 135042641649273,
     ShowText = "Rayfield",
 
     ConfigurationSaving = {
