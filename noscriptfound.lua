@@ -5,7 +5,8 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "hello there <3",
     LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
-    Icon = 135042641649273,
+    -- Icon = 135042641649273,
+        Icon = 0,
     ShowText = "Rayfield",
 
     ConfigurationSaving = {
@@ -36,7 +37,7 @@ local Window = Rayfield:CreateWindow({
 
 
 
-local scriptsTAB = Window:CreateTab("Player", 135042641649273)
+local scriptsTAB = Window:CreateTab("Player", 4483362458)
 local KeybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
 
