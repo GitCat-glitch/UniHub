@@ -1,22 +1,23 @@
+--// Load Rayfield Library
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+--// Window Setup
 local Window = Rayfield:CreateWindow({
-    Name = "UniScript HUB [v1.1]",
-    LoadingTitle = "hello there <3",
-    LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
+    Name = "UniScript HUB [v2.0]",
+    LoadingTitle = "Ultimate Hub Loading...",
+    LoadingSubtitle = "By SomeoneCool 😎",
 
-    Icon = 15462829911,
-    Color = Color3.fromRGB(255,0,0),
-
+    Icon = 17677152287,
+    Color = Color3.fromRGB(255, 0, 0),
     ShowText = "Rayfield",
 
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "Script",
+        FolderName = "UniScript",
         FileName = "Config"
     },
 
-    Theme = "Default",
+    Theme = "Amethyst",
 
     Discord = {
         Enabled = false,
@@ -24,46 +25,53 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
 
-   KeySystem = true,
-   KeySettings = {
-      Title = "Key Menu Omega ΩΩΩΩΩ",
-      Subtitle = "yep",
-      Note = "How do you get keys? idk just type in : realc0lkit",
-      FileName = "Key",
-      SaveKey = true,
-      GrabKeyFromSite = false,
-      Key = {"SomeoneSucks", "C0lgate", "tembl3udud", "RealC0lkit"}
-   }
+    KeySystem = true,
+    KeySettings = {
+        Title = "Key Menu Ω",
+        Subtitle = "Enter Key to Unlock",
+        Note = "Valid Keys: RealC0lkit, C0lgate, etc.",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {"SomeoneSucks", "C0lgate", "tembl3udud", "RealC0lkit"}
+    }
 })
 
-
-
-
-local scriptsTAB = Window:CreateTab("Player", 4483362458)
-local KeybindsTAB = Window:CreateTab("Keybinds", 4483362458)
+--// Tabs
+local homeTAB = Window:CreateTab("Home", 4483362458)
+local playerTAB = Window:CreateTab("Player", 4483362458)
+local keybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
 
-
+--// Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
-
+--// Variables
 local creatingParts = false
+local espEnabled = false
 local maxParts = 20
 local partList = {}
+local highlights = {}
 local toggleKey = Enum.KeyCode.F
+local flyEnabled = false
+local flySpeed = 50
+local noclipEnabled = false
+local infiniteJumpEnabled = false
 
+--// Utility Functions
 local function createPart()
-    local character = player.Character
-    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    local char = player.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
 
     local part = Instance.new("Part")
     part.Size = Vector3.new(5, 1, 5)
     part.Transparency = 0.5
     part.Anchored = true
     part.CanCollide = true
-    part.Position = character.HumanoidRootPart.Position - Vector3.new(0, character.HumanoidRootPart.Size.Y / 2 + 2.5, 0)
+    part.Position = char.HumanoidRootPart.Position - Vector3.new(0, char.HumanoidRootPart.Size.Y / 2 + 2.5, 0)
     part.Parent = workspace
 
     table.insert(partList, part)
@@ -73,7 +81,7 @@ local function createPart()
     end
 end
 
-local function startPartCreationLoop()
+local function startPartLoop()
     task.spawn(function()
         while creatingParts do
             createPart()
@@ -82,12 +90,9 @@ local function startPartCreationLoop()
     end)
 end
 
-
-local highlights = {}
-local espEnabled = false
-
-local function addHighlightToCharacter(plr, char)
-    if not char or not plr then return end
+--// ESP Functions
+local function addHighlight(plr, char)
+    if not plr or not char then return end
 
     if highlights[plr] then
         highlights[plr]:Destroy()
@@ -97,7 +102,6 @@ local function addHighlightToCharacter(plr, char)
     if not char:FindFirstChild("HumanoidRootPart") then
         pcall(function() char:WaitForChild("HumanoidRootPart", 5) end)
     end
-    if not char.Parent then return end
 
     local highlight = Instance.new("Highlight")
     highlight.FillColor = Color3.fromRGB(255, 255, 0)
@@ -112,7 +116,7 @@ local function onCharacterAdded(plr, char)
     task.defer(function()
         if espEnabled then
             task.wait(0.2)
-            addHighlightToCharacter(plr, char)
+            addHighlight(plr, char)
         end
     end)
 end
@@ -121,7 +125,7 @@ local function enableESP()
     espEnabled = true
     for _, plr in ipairs(Players:GetPlayers()) do
         if plr ~= player and plr.Character then
-            addHighlightToCharacter(plr, plr.Character)
+            addHighlight(plr, plr.Character)
         end
         plr.CharacterAdded:Connect(function(char)
             onCharacterAdded(plr, char)
@@ -132,11 +136,65 @@ end
 local function disableESP()
     espEnabled = false
     for plr, hl in pairs(highlights) do
-        if hl and hl.Parent then hl:Destroy() end
+        if hl then hl:Destroy() end
     end
     table.clear(highlights)
 end
 
+--// Fly / Noclip
+local bodyVelocity
+local function enableFly()
+    if not player.Character then return end
+    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    flyEnabled = true
+
+    bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    bodyVelocity.Parent = hrp
+end
+
+local function disableFly()
+    flyEnabled = false
+    if bodyVelocity then bodyVelocity:Destroy() bodyVelocity = nil end
+end
+
+RunService.RenderStepped:Connect(function()
+    if flyEnabled and player.Character then
+        local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local camCF = workspace.CurrentCamera.CFrame
+            local direction = Vector3.new()
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then direction += camCF.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then direction -= camCF.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then direction -= camCF.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then direction += camCF.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then direction += Vector3.new(0,1,0) end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then direction -= Vector3.new(0,1,0) end
+            bodyVelocity.Velocity = direction.Unit * flySpeed
+        end
+    end
+
+    -- Noclip
+    if noclipEnabled and player.Character then
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
+
+--// Infinite Jump
+UserInputService.JumpRequest:Connect(function()
+    if infiniteJumpEnabled then
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+    end
+end)
+
+--// Player Events
 Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
         onCharacterAdded(plr, char)
@@ -153,126 +211,145 @@ Players.PlayerRemoving:Connect(function(plr)
     end
 end)
 
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
+--// Keybind Input
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
     if input.KeyCode == toggleKey then
         creatingParts = not creatingParts
-        if creatingParts then
-            startPartCreationLoop()
-        end
+        if creatingParts then startPartLoop() end
     end
 end)
 
+--// UI Elements
 
-scriptsTAB:CreateToggle({
+Rayfield:Notify({
+    Title = "Hello",
+    Content = "Welcome to Ultimate Hub v2.0 😎",
+    Duration = 3,
+    Image = 16467424883,
+})
+
+-- Player TAB
+playerTAB:CreateToggle({
     Name = "Create Path (Toggle)",
     CurrentValue = false,
     Flag = "pathcreator",
     Callback = function(Value)
         creatingParts = Value
-        if creatingParts then startPartCreationLoop() end
+        if creatingParts then startPartLoop() end
     end,
 })
 
-KeybindsTAB:CreateInput({
-    Name = "Create Path Toggle Key ",
-    PlaceholderText = "Enter key (e.g. F, G, T)",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(inputText)
-        local upper = inputText:upper()
-        local newKeyCode = Enum.KeyCode[upper]
+playerTAB:CreateInput({
+    Name = "Walkspeed",
+    PlaceholderText = "16, 32, 64...",
+    Callback = function(v)
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.WalkSpeed = tonumber(v) or 16 end
+    end,
+})
 
-        if newKeyCode then
-            toggleKey = newKeyCode
+playerTAB:CreateInput({
+    Name = "Jump Power",
+    PlaceholderText = "16, 32, 64...",
+    Callback = function(v)
+        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.JumpPower = tonumber(v) or 50 end
+    end,
+})
+
+playerTAB:CreateToggle({
+    Name = "ESP",
+    CurrentValue = false,
+    Callback = function(v)
+        if v then enableESP() else disableESP() end
+    end,
+})
+
+playerTAB:CreateToggle({
+    Name = "Infinite Jump",
+    CurrentValue = false,
+    Callback = function(v) infiniteJumpEnabled = v end,
+})
+
+playerTAB:CreateToggle({
+    Name = "Fly",
+    CurrentValue = false,
+    Callback = function(v)
+        if v then enableFly() else disableFly() end
+    end,
+})
+
+playerTAB:CreateToggle({
+    Name = "Noclip",
+    CurrentValue = false,
+    Callback = function(v) noclipEnabled = v end,
+})
+
+
+homeTAB:CreateParagraph({
+    Title = "Welcome to UniScript HUB v2.0",
+    Content = string.format(
+        "Place ID: %d\nGame ID: %d\nPlayers: %d",
+        game.PlaceId,
+        game.GameId,
+        #Players:GetPlayers()
+    )
+})
+
+homeTAB:CreateButton({
+    Name = "Refresh Server Info",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Server Info",
+            Content = string.format(
+                "Place ID: %d\nGame ID: %d\nPlayers: %d",
+                game.PlaceId,
+                game.GameId,
+                #Players:GetPlayers()
+            ),
+            Duration = 3
+        })
+    end
+})
+
+keybindsTAB:CreateInput({
+    Name = "Set Path Toggle Key",
+    PlaceholderText = "F, G, T...",
+    Callback = function(text)
+        local key = Enum.KeyCode[text:upper()]
+        if key then
+            toggleKey = key
             Rayfield:Notify({
                 Title = "Keybind Changed",
-                Content = "New toggle key: " .. upper,
+                Content = "New path toggle key: " .. text:upper(),
                 Duration = 3
             })
         else
             Rayfield:Notify({
                 Title = "Invalid Key",
-                Content = "Could not set key: '" .. inputText .. "' is not valid.",
-                Duration = 2
-            })
-        end
-    end,
-})
-
-scriptsTAB:CreateInput({
-    Name = "Walkspeed",
-    PlaceholderText = "Enter Number (16, 32, 64, 128)",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(v)
-        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-        if hum then
-            hum.WalkSpeed = tonumber(v) or 16
-            Rayfield:Notify({
-                Title = "Walkspeed Changed",
-                Content = "Set Walkspeed to " .. v,
+                Content = "'" .. text .. "' is not valid.",
                 Duration = 3
             })
         end
-    end,
+    end
 })
 
-scriptsTAB:CreateInput({
-    Name = "Jump Power",
-    PlaceholderText = "Enter Number (16, 32, 64, 128)",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(v)
-        local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-        if hum then
-            hum.JumpPower = tonumber(v) or 50
-            Rayfield:Notify({
-                Title = "Jump Power Changed",
-                Content = "Set JumpPower to " .. v,
-                Duration = 3
-            })
-        end
-    end,
+uiTAB:CreateButton({
+    Name = "Test Notification",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Hello!",
+            Content = "This is a test notification from UI tab.",
+            Duration = 3
+        })
+    end
 })
-
-scriptsTAB:CreateToggle({
-    Name = "ESP",
-    CurrentValue = false,
-    Flag = "ESP",
-    Callback = function(v)
-        if v then
-            enableESP()
-            Rayfield:Notify({
-                Title = "ESP",
-                Content = "Enabled",
-                Duration = 3
-            })
-        else
-            disableESP()
-            Rayfield:Notify({
-                Title = "ESP",
-                Content = "Disabled",
-                Duration = 3
-            })
-        end
-    end,
-})
-
 
 uiTAB:CreateDropdown({
-    Name = "Theme",
-    Options = {"Default", "Amber Glow", "Amethyst", "Bloom", "Dark Blue", "Green", "Light", "Ocean", "Serenity"},
-    CurrentOption = {"Default"},
-    MultipleOptions = false,
-    Flag = "Theme",
-    Callback = function(Options)
-        local selectedTheme = Options[1]
-        if selectedTheme then
-            Window.Theme = selectedTheme
-            Rayfield:Notify({
-                Title = "Theme Changed",
-                Content = "Theme set to: " .. selectedTheme,
-                Duration = 3
-            })
-        end
-    end,
+    Name = "Change Theme",
+    Options = {"Amethyst", "Blood", "Ocean", "Midnight"},
+    Callback = function(theme)
+        Window:ChangeTheme(theme)
+    end
 })
