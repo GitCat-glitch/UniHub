@@ -286,6 +286,89 @@ gameTAB:CreateButton({
     end
 })
 
+--// Teleport System for TPS Models
+local tpsFolder = workspace:FindFirstChild("TPS")
+local tpsNames = {}
+local selectedTP = nil -- dropdown seçimi buraya kaydedilecek
+
+if tpsFolder then
+    for _, obj in pairs(tpsFolder:GetChildren()) do
+        if obj:IsA("Model") then
+            table.insert(tpsNames, obj.Name)
+        end
+    end
+else
+    warn("Workspace içinde 'TPS' klasörü bulunamadı!")
+end
+
+-- Dropdown: TPS içindeki modelleri listele
+local dropdown = gameTAB:CreateDropdown({
+    Name = "Select Teleport Location",
+    Options = tpsNames,
+    Callback = function(selected)
+        selectedTP = selected
+        Rayfield:Notify({
+            Title = "Location Selected",
+            Content = "Selected: " .. selectedTP,
+            Duration = 3
+        })
+    end
+})
+
+-- Teleport butonu
+gameTAB:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        if not selectedTP then
+            Rayfield:Notify({
+                Title = "No Location Selected",
+                Content = "Please select a location from dropdown first!",
+                Duration = 3
+            })
+            return
+        end
+
+        local target = tpsFolder:FindFirstChild(selectedTP)
+        if not target then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target model not found in TPS folder!",
+                Duration = 3
+            })
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            -- Eğer PrimaryPart varsa oraya git, yoksa modelin merkezine
+            local destinationCFrame
+            if target.PrimaryPart then
+                destinationCFrame = target.PrimaryPart.CFrame
+            else
+                local cf = target:GetBoundingBox()
+                destinationCFrame = cf
+            end
+
+            -- Teleport et
+            hrp.CFrame = destinationCFrame + Vector3.new(0, 3, 0)
+            Rayfield:Notify({
+                Title = "Teleported!",
+                Content = "Moved to " .. selectedTP,
+                Duration = 2
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "HumanoidRootPart not found!",
+                Duration = 3
+            })
+        end
+    end
+})
+
 end
 
 local keybindsTAB = Window:CreateTab("Keybinds", 4483362458)
