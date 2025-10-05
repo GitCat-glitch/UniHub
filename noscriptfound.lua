@@ -1,11 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "UniScript HUB [v1]",
+    Name = "UniScript HUB [v1.1]",
     LoadingTitle = "hello there <3",
     LoadingSubtitle = "by someone that i cant tell cuz i dont wanna get banned x3",
 
-    -- pass the asset id as a number (not a "rbxassetid://" string)
     Icon = 15462829911,
     Color = Color3.fromRGB(255,0,0),
 
@@ -268,7 +267,7 @@ uiTAB:CreateDropdown({
     Callback = function(Options)
         local selectedTheme = Options[1]
         if selectedTheme then
-            Window:SetTheme(selectedTheme)
+            Window.Theme = selectedTheme
             Rayfield:Notify({
                 Title = "Theme Changed",
                 Content = "Theme set to: " .. selectedTheme,
