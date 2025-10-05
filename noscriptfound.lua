@@ -27,9 +27,9 @@ local Window = Rayfield:CreateWindow({
 
    KeySystem = true,
    KeySettings = {
-      Title = "Key Menu Omega",
+      Title = "Key Menu Omega ΩΩΩΩΩ",
       Subtitle = "yep",
-      Note = "How do you get keys? idk heres one : realc0lkit",
+      Note = "How do you get keys? idk just type in : realc0lkit",
       FileName = "Key",
       SaveKey = true,
       GrabKeyFromSite = false,
