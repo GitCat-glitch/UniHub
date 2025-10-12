@@ -554,8 +554,8 @@ end)
 --// UI Elements
 
 Rayfield:Notify({
-    Title = "Hello",
-    Content = "Welcome to Ultimate Hub v2.0 😎",
+    Title = "Hello ;3",
+    Content = "Welcome to UniHub. idc if u get banned btw",
     Duration = 3,
     Image = 16467424883,
 })
@@ -670,9 +670,9 @@ uiTAB:CreateButton({
     Name = "Test Notification",
     Callback = function()
         Rayfield:Notify({
-            Title = "Hello!",
-            Content = "This is a test notification from UI tab.",
-            Duration = 3
+            Title = "Notification",
+            Content = "Supercalifragilisticexpialidocious notification .",
+            Duration = 0.5
         })
     end
 })
