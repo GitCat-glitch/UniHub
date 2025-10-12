@@ -44,7 +44,7 @@ if supportedGames[game.GameId] then
 
     print("Loaded remote script for game:", game.GameId)
 else
-    
+    -- e
 loadstring(game:HttpGet("https://raw.githubusercontent.com/GitCat-glitch/UniHub/refs/heads/main/noscriptfound.lua"))()
     print("No script available for this game ID:", game.GameId)
 end
