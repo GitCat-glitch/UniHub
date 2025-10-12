@@ -1,7 +1,7 @@
---// Load Rayfield Library
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
---// Window Setup
+
 local Window = Rayfield:CreateWindow({
     Name = "UniScript HUB [v2.0]",
     LoadingTitle = "Ultimate Hub Loading...",
@@ -39,77 +39,347 @@ local Window = Rayfield:CreateWindow({
 
 
 
---// Tabs
+
 local homeTAB = Window:CreateTab("Home", 4483362458)
 local playerTAB = Window:CreateTab("Player", 4483362458)
--- list of supported game IDs (as keys for O(1) lookup)
-local supportedGames = {
-    [3649378258] = true,
-    -- add others like [123456789] = true,
-}
-if supportedGames[game.GameId] then
-    local url = "https://raw.githubusercontent.com/GitCat-glitch/UniHub/main/" .. tostring(game.GameId) .. ".lua"
+if game.GameId == 3649378258 then
+    local gameTAB = Window:CreateTab("Game (Random Tool)", 4483362458)
+    gameTAB:CreateButton({
+        Name = "Get Gambling Island Ticket",
+    
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if not player then return end
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart")
+        local interactable = workspace:FindFirstChild("Interactable")
+        local ticketPart = interactable:FindFirstChild("Gambling Island Ticket")
+        local prevCFrame = hrp.CFrame
+        hrp.CFrame = ticketPart.CFrame + Vector3.new(0, 3, 0)
+        wait(0.05)
+        local clicked = false
+        local cd = ticketPart:FindFirstChildOfClass("ClickDetector")
 
-    -- fetch remote script safely
-    local ok, res = pcall(function()
-        -- some exploit environments use game:HttpGet, others have HttpGetAsync/http_request variants
-        if type(game.HttpGet) == "function" then
-            return game:HttpGet(url)
-        elseif type(game.HttpGetAsync) == "function" then
-            return game:HttpGetAsync(url)
-        else
-            -- fallback to synapse request if available
-            if type(syn) == "table" and type(syn.request) == "function" then
-                local r = syn.request({ Url = url, Method = "GET" })
-                return r.Body
+        
+        if not clicked and type(fireclickdetector) == "function" then
+            local ok, err = pcall(function() fireclickdetector(cd or ticketPart) end)
+            if ok then
+                clicked = true
+                print("Clicked via fireclickdetector")
+            else
+                warn("fireclickdetector error:", err)
             end
-            error("No HttpGet available in this environment")
         end
-    end)
 
-    if not ok or not res or res == "" then
-        warn("Failed to fetch remote script:", res)
-        return
+        
+        if not clicked and type(firetouchinterest) == "function" then
+            local ok, err = pcall(function()
+                
+                firetouchinterest(hrp, ticketPart, 0)
+                wait(0.08)
+                
+                firetouchinterest(hrp, ticketPart, 1)
+            end)
+            if ok then
+                clicked = true
+                print("Clicked via firetouchinterest")
+            else
+                warn("firetouchinterest error:", err)
+            end
+        end
+
+        
+        if not clicked then
+            
+            if cd and cd:FindFirstChildWhichIsA("ObjectValue") == nil then
+                local success, err = pcall(function()
+                    
+                    if cd and cd.MouseClick and type(cd.MouseClick.Fire) == "function" then
+                        cd.MouseClick:Fire(player)
+                    end
+                end)
+                if success then
+                    clicked = true
+                    print("Tried MouseClick:Fire (fallback)")
+                else
+                    warn("MouseClick:Fire attempt failed:", err)
+                end
+            end
+        end
+
+        
+        if not clicked then
+            warn("No supported exploit helper found (fireclickdetector / firetouchinterest). Can't trigger the ClickDetector from this environment.")
+        end
+
+        
+        wait(0.08)
+        pcall(function() hrp.CFrame = prevCFrame end)
     end
+    })
+    gameTAB:CreateButton({
+        Name = "Get Fanta",
+    
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if not player then return end
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart")
+        local interactable = workspace:FindFirstChild("Interactable")
+        local ticketPart = interactable:FindFirstChild("Fanta")
+        local prevCFrame = hrp.CFrame
+        hrp.CFrame = ticketPart.CFrame + Vector3.new(0, 3, 0)
+        wait(0.05)
+        local clicked = false
+        local cd = ticketPart:FindFirstChildOfClass("ClickDetector")
 
-    -- compile
-    local fn, err = loadstring(res)
-    if not fn then
-        warn("loadstring failed:", err)
-        return
+        
+        if not clicked and type(fireclickdetector) == "function" then
+            local ok, err = pcall(function() fireclickdetector(cd or ticketPart) end)
+            if ok then
+                clicked = true
+                print("Clicked via fireclickdetector")
+            else
+                warn("fireclickdetector error:", err)
+            end
+        end
+
+        
+        if not clicked and type(firetouchinterest) == "function" then
+            local ok, err = pcall(function()
+                
+                firetouchinterest(hrp, ticketPart, 0)
+                wait(0.08)
+                
+                firetouchinterest(hrp, ticketPart, 1)
+            end)
+            if ok then
+                clicked = true
+                print("Clicked via firetouchinterest")
+            else
+                warn("firetouchinterest error:", err)
+            end
+        end
+
+        
+        if not clicked then
+            
+            if cd and cd:FindFirstChildWhichIsA("ObjectValue") == nil then
+                local success, err = pcall(function()
+                    
+                    if cd and cd.MouseClick and type(cd.MouseClick.Fire) == "function" then
+                        cd.MouseClick:Fire(player)
+                    end
+                end)
+                if success then
+                    clicked = true
+                    print("Tried MouseClick:Fire (fallback)")
+                else
+                    warn("MouseClick:Fire attempt failed:", err)
+                end
+            end
+        end
+
+        
+        if not clicked then
+            warn("No supported exploit helper found (fireclickdetector / firetouchinterest). Can't trigger the ClickDetector from this environment.")
+        end
+
+        
+        wait(0.08)
+        pcall(function() hrp.CFrame = prevCFrame end)
     end
+    })
+    gameTAB:CreateButton({
+        Name = "Get construction",
+    
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if not player then return end
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart")
+        local interactable = workspace:FindFirstChild("Interactable")
+        local ticketPart = interactable:FindFirstChild("construction")
+        local prevCFrame = hrp.CFrame
+        hrp.CFrame = ticketPart.CFrame + Vector3.new(0, 3, 0)
+        wait(0.05)
+        local clicked = false
+        local cd = ticketPart:FindFirstChildOfClass("ClickDetector")
 
-    -- run safely and capture module return value (if any)
-    local success, resultOrErr = pcall(fn)
-    if not success then
-        warn("Remote script errored:", resultOrErr)
-        return
+        
+        if not clicked and type(fireclickdetector) == "function" then
+            local ok, err = pcall(function() fireclickdetector(cd or ticketPart) end)
+            if ok then
+                clicked = true
+                print("Clicked via fireclickdetector")
+            else
+                warn("fireclickdetector error:", err)
+            end
+        end
+
+        
+        if not clicked and type(firetouchinterest) == "function" then
+            local ok, err = pcall(function()
+                
+                firetouchinterest(hrp, ticketPart, 0)
+                wait(0.08)
+                
+                firetouchinterest(hrp, ticketPart, 1)
+            end)
+            if ok then
+                clicked = true
+                print("Clicked via firetouchinterest")
+            else
+                warn("firetouchinterest error:", err)
+            end
+        end
+
+        
+        if not clicked then
+            
+            if cd and cd:FindFirstChildWhichIsA("ObjectValue") == nil then
+                local success, err = pcall(function()
+                    
+                    if cd and cd.MouseClick and type(cd.MouseClick.Fire) == "function" then
+                        cd.MouseClick:Fire(player)
+                    end
+                end)
+                if success then
+                    clicked = true
+                    print("Tried MouseClick:Fire (fallback)")
+                else
+                    warn("MouseClick:Fire attempt failed:", err)
+                end
+            end
+        end
+
+        
+        if not clicked then
+            warn("No supported exploit helper found (fireclickdetector / firetouchinterest). Can't trigger the ClickDetector from this environment.")
+        end
+
+        
+        wait(0.08)
+        pcall(function() hrp.CFrame = prevCFrame end)
     end
+    })
 
-    -- if the remote returned a module table, you can use it
-    if type(resultOrErr) == "table" then
-        -- example: if module has an Init function, call it safely
-        if type(resultOrErr.Init) == "function" then
-            pcall(function() resultOrErr.Init() end)
+gameTAB:CreateButton({
+    Name = "Remove Doors (from houses)",
+    Callback = function()
+        
+        local housesFolder = workspace:FindFirstChild("House")
+        if housesFolder then
+            for _, house in pairs(housesFolder:GetChildren()) do
+                
+                for _, obj in pairs(house:GetDescendants()) do
+                    
+                    if obj.Name == "Door" then
+                        obj:Destroy()
+                    end
+                end
+            end
+        else
+            warn("Workspace içinde 'House' bulunamadı!")
         end
     end
+})
 
-    print("Remote script loaded successfully from:", url)
+
+local tpsFolder = workspace:FindFirstChild("TPS")
+local tpsNames = {}
+local selectedTP = nil 
+
+if tpsFolder then
+    for _, obj in pairs(tpsFolder:GetChildren()) do
+        if obj:IsA("Model") then
+            table.insert(tpsNames, obj.Name)
+        end
+    end
 else
-    print("No Scripts found for game ID: ", game.GameId)
+    warn("Workspace içinde 'TPS' klasörü bulunamadı!")
 end
 
+
+local dropdown = gameTAB:CreateDropdown({
+    Name = "Select Teleport Location",
+    Options = tpsNames,
+    Callback = function(selected)
+        selectedTP = selected
+        Rayfield:Notify({
+            Title = "Location Selected",
+            Content = "Selected: " .. selectedTP,
+            Duration = 3
+        })
+    end
+})
+
+
+gameTAB:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        if not selectedTP then
+            Rayfield:Notify({
+                Title = "No Location Selected",
+                Content = "Please select a location from dropdown first!",
+                Duration = 3
+            })
+            return
+        end
+
+        local target = tpsFolder:FindFirstChild(selectedTP)
+        if not target then
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Target model not found in TPS folder!",
+                Duration = 3
+            })
+            return
+        end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            
+            local destinationCFrame
+            if target.PrimaryPart then
+                destinationCFrame = target.PrimaryPart.CFrame
+            else
+                local cf = target:GetBoundingBox()
+                destinationCFrame = cf
+            end
+
+            
+            hrp.CFrame = destinationCFrame + Vector3.new(0, 3, 0)
+            Rayfield:Notify({
+                Title = "Teleported!",
+                Content = "Moved to " .. selectedTP,
+                Duration = 2
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "HumanoidRootPart not found!",
+                Duration = 3
+            })
+        end
+    end
+})
+
+end
 
 local keybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
 
---// Services
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
---// Variables
+
 local creatingParts = false
 local espEnabled = false
 local maxParts = 20
@@ -121,7 +391,7 @@ local flySpeed = 50
 local noclipEnabled = false
 local infiniteJumpEnabled = false
 
---// Utility Functions
+
 local function createPart()
     local char = player.Character
     if not char or not char:FindFirstChild("HumanoidRootPart") then return end
@@ -150,7 +420,7 @@ local function startPartLoop()
     end)
 end
 
---// ESP Functions
+
 local function addHighlight(plr, char)
     if not plr or not char then return end
 
@@ -201,7 +471,7 @@ local function disableESP()
     table.clear(highlights)
 end
 
---// Fly / Noclip
+
 local bodyVelocity
 local function enableFly()
     if not player.Character then return end
@@ -236,7 +506,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- Noclip
+    
     if noclipEnabled and player.Character then
         for _, part in pairs(player.Character:GetDescendants()) do
             if part:IsA("BasePart") then
@@ -246,7 +516,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
---// Infinite Jump
+
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled then
         local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
@@ -254,7 +524,7 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
---// Player Events
+
 Players.PlayerAdded:Connect(function(plr)
     plr.CharacterAdded:Connect(function(char)
         onCharacterAdded(plr, char)
@@ -271,7 +541,7 @@ Players.PlayerRemoving:Connect(function(plr)
     end
 end)
 
---// Keybind Input
+
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
     if input.KeyCode == toggleKey then
@@ -280,7 +550,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
     end
 end)
 
---// UI Elements
+
 
 Rayfield:Notify({
     Title = "Hello ;3",
@@ -289,7 +559,7 @@ Rayfield:Notify({
     Image = 16467424883,
 })
 
--- Player TAB
+
 playerTAB:CreateToggle({
     Name = "Create Path (Toggle)",
     CurrentValue = false,
