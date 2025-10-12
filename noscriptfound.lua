@@ -42,10 +42,63 @@ local Window = Rayfield:CreateWindow({
 --// Tabs
 local homeTAB = Window:CreateTab("Home", 4483362458)
 local playerTAB = Window:CreateTab("Player", 4483362458)
+-- list of supported game IDs (as keys for O(1) lookup)
+local supportedGames = {
+    [3649378258] = true,
+    -- add others like [123456789] = true,
+}
+if supportedGames[game.GameId] then
+    local url = "https://raw.githubusercontent.com/GitCat-glitch/UniHub/main/" .. tostring(game.GameId) .. ".lua"
 
-if game.GameId == 3649378258 then
-    require(game:HttpGet("https://raw.githubusercontent.com/GitCat-glitch/UniHub/refs/heads/main/randomtool.lua"))
+    -- fetch remote script safely
+    local ok, res = pcall(function()
+        -- some exploit environments use game:HttpGet, others have HttpGetAsync/http_request variants
+        if type(game.HttpGet) == "function" then
+            return game:HttpGet(url)
+        elseif type(game.HttpGetAsync) == "function" then
+            return game:HttpGetAsync(url)
+        else
+            -- fallback to synapse request if available
+            if type(syn) == "table" and type(syn.request) == "function" then
+                local r = syn.request({ Url = url, Method = "GET" })
+                return r.Body
+            end
+            error("No HttpGet available in this environment")
+        end
+    end)
+
+    if not ok or not res or res == "" then
+        warn("Failed to fetch remote script:", res)
+        return
+    end
+
+    -- compile
+    local fn, err = loadstring(res)
+    if not fn then
+        warn("loadstring failed:", err)
+        return
+    end
+
+    -- run safely and capture module return value (if any)
+    local success, resultOrErr = pcall(fn)
+    if not success then
+        warn("Remote script errored:", resultOrErr)
+        return
+    end
+
+    -- if the remote returned a module table, you can use it
+    if type(resultOrErr) == "table" then
+        -- example: if module has an Init function, call it safely
+        if type(resultOrErr.Init) == "function" then
+            pcall(function() resultOrErr.Init() end)
+        end
+    end
+
+    print("Remote script loaded successfully from:", url)
+else
+    print("No Scripts found for game ID: ", game.GameId)
 end
+
 
 local keybindsTAB = Window:CreateTab("Keybinds", 4483362458)
 local uiTAB = Window:CreateTab("UI", 4483362458)
