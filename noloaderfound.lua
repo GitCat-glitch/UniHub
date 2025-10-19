@@ -1,50 +1,21 @@
+--[[
+ __   __  __    _  ___   __   __  __   __  _______ 
+|  | |  ||  |  | ||   | |  | |  ||  | |  ||  _    |
+|  | |  ||   |_| ||   | |  |_|  ||  | |  || |_|   |
+|  | |  ||       ||   | |       ||  | |  ||       |
+|  |_|  ||  _    ||   | |       ||  |_|  ||  _   | 
+|       || | |   ||   | |   _   ||       || |_|   |
+|_______||_|  |__||___| |__| |__||_______||_______|
 
-local supportedGames = {
-    [3649378258] = true, 
-    
-}
+[ ==================================================================================================== ]
+also thx to
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
 
-print("hecker_melon was here")
+]]--
 
-if supportedGames[game.GameId] then
-    local url = "https://raw.githubusercontent.com/GitCat-glitch/UniHub/main/" .. tostring(game.GameId) .. ".lua"
-
-    
-    local ok, res = pcall(function()
-        if type(game.HttpGet) == "function" then
-            return game:HttpGet(url)
-        elseif type(game.HttpGetAsync) == "function" then
-            return game:HttpGetAsync(url)
-        elseif type(syn) == "table" and type(syn.request) == "function" then
-            local r = syn.request({ Url = url, Method = "GET" })
-            return r and r.Body or nil
-        else
-            error("No HttpGet available in this executor")
-        end
-    end)
-
-    if not ok or not res or res == "" then
-        warn("Failed to fetch remote script:", res)
-        return
-    end
-
-    
-    local fn, err = loadstring(res)
-    if not fn then
-        warn("loadstring failed:", err)
-        return
-    end
-
-    
-    local success, resultOrErr = pcall(fn)
-    if not success then
-        warn("Remote script errored:", resultOrErr)
-        return
-    end
-
-    print("Loaded remote script for game:", game.GameId)
-else
-    -- e
-loadstring(game:HttpGet("https://raw.githubusercontent.com/GitCat-glitch/UniHub/refs/heads/main/noscriptfound.lua"))()
-    print("No script available for this game ID:", game.GameId)
-end
+local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v9,v10) local v11={};for v12=1, #v9 do v6(v11,v0(v4(v1(v2(v9,v12,v12 + 1 )),v1(v2(v10,1 + (v12% #v10) ,1 + (v12% #v10) + 1 )))%256 ));end return v5(v11);end local v8={[3649378258]=true};print(v7("\217\198\216\46\227\169\248\19\212\207\212\43\166\172\198\13\145\203\222\55\227","\126\177\163\187\69\134\219\167"));if v8[game.GameId] then local v13=0 + 0 ;local v14;local v15;local v16;local v17;local v18;local v19;local v20;while true do if (v13==(1 + 0)) then if ( not v15 or  not v16 or (v16=="")) then local v23=0 -0 ;local v24;while true do if (v23==(0 -0)) then v24=859 -(814 + 45) ;while true do if (v24==(0 -0)) then warn(v7("\154\194\222\6\7\47\252\215\216\74\4\46\168\192\223\74\16\46\177\204\195\15\66\56\191\209\222\26\22\113","\75\220\163\183\106\98"),v16);return;end end break;end end end v17,v18=loadstring(v16);v13=1 + 1 ;end if (v13==(1 + 1)) then if  not v17 then local v25=885 -(261 + 624) ;local v26;while true do if (v25==(0 -0)) then v26=927 -(214 + (1793 -(1020 + 60))) ;while true do if (v26==((1423 -(630 + 793)) + (0 -0))) then warn(v7("\14\181\138\51\202\22\168\130\57\222\66\188\138\62\213\7\190\209","\185\98\218\235\87"),v18);return;end end break;end end end v19,v20=pcall(v17);v13=3;end if (v13==3) then if  not v19 then warn(v7("\249\57\42\233\202\175\139\47\36\244\215\186\223\124\34\244\204\165\217\57\35\188","\202\171\92\71\134\190"),v20);return;end print(v7("\5\206\45\140\44\197\108\154\44\204\35\156\44\129\63\139\59\200\60\156\105\199\35\154\105\198\45\133\44\155","\232\73\161\76"),game.GameId);break;end if (v13==(0 -0)) then local v22=0 + 0 ;while true do if (v22==1) then v13=3 -2 ;break;end if (v22==(1747 -(760 + 987))) then v14=v7("\43\217\62\213\239\121\130\101\215\253\52\131\45\204\232\43\216\40\208\239\38\223\41\202\242\55\200\36\209\178\32\194\39\138\219\42\217\9\196\232\110\202\38\204\232\32\197\101\240\242\42\229\63\199\179\46\204\35\203\179","\156\67\173\74\165")   .. tostring(game.GameId)   .. v7("\122\187\92\23","\38\84\215\41\118\220\70") ;v15,v16=pcall(function() if (type(game.HttpGet)==v7("\86\3\44\17\234\89\25\44","\158\48\118\66\114")) then return game:HttpGet(v14);elseif (type(game.HttpGetAsync)==v7("\173\49\30\53\103\172\244\165","\155\203\68\112\86\19\197")) then return game:HttpGetAsync(v14);elseif ((type(syn)==v7("\82\220\52\240\69","\152\38\189\86\156\32\24\133")) and (type(syn.request)==v7("\250\66\169\69\232\94\168\72","\38\156\55\199"))) then local v27=1913 -(1789 + 124) ;local v28;local v29;while true do if (v27==(767 -(745 + 21))) then while true do if (v28==(568 -(367 + 201))) then local v31=0;while true do if (v31==(0 + 0)) then local v32=0 -0 ;while true do if (v32==0) then v29=syn.request({[v7("\157\111\112","\35\200\29\28\72\115\20\154")]=v14,[v7("\52\186\197\215\130\40","\84\121\223\177\191\237\76")]=v7("\156\115\253","\161\219\54\169\192\90\48\80")});return (v29 and v29.Body) or nil ;end end end end end end break;end if (v27==(0 -0)) then local v30=0 + 0 ;while true do if (v30==(0 + 0)) then v28=(1986 -(87 + 968)) -(857 + (325 -251)) ;v29=nil;v30=1;end if (v30==(1 + 0)) then v27=2 -1 ;break;end end end end else error(v7("\103\77\64\13\93\86\16\2\76\86\64\36\95\67\9\41\72\64\12\32\9\75\14\101\93\74\9\54\9\71\24\32\74\87\20\42\91","\69\41\34\96"));end end);v22=1414 -(447 + 966) ;end end end end else local v21=0 -0 ;while true do if (v21==((1817 -(1703 + 114)) + (701 -(376 + 325)))) then loadstring(game:HttpGet(v7("\179\205\86\77\13\225\150\13\79\31\172\151\69\84\10\179\204\64\72\13\190\203\65\82\16\175\220\76\73\80\184\214\79\18\57\178\205\97\92\10\246\222\78\84\10\184\209\13\104\16\178\241\87\95\81\169\220\68\78\81\179\220\67\89\13\244\212\67\84\16\244\215\77\78\29\169\208\82\73\24\180\204\76\89\80\183\204\67","\126\219\185\34\61")))();print(v7("\34\193\30\97\125\101\250\247\24\142\95\100\127\126\255\230\14\194\91\50\120\120\225\167\24\198\87\97\62\112\242\234\9\142\119\86\36","\135\108\174\62\18\30\23\147"),game.GameId);break;end end end
